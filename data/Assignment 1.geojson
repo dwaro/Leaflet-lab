@@ -1,0 +1,567 @@
+/* Assignment 1 Western Hemisphere GeoJSON file */
+
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Argentina",
+        "Pop_growth_1980_1985": 1.081224612,
+        "Pop_growth_1985_1990": 1.077033695,
+        "Pop_growth_1990_1995": 1.06920556,
+        "Pop_growth_1995_2000": 1.058941009,
+        "Pop_growth_2000_2005": 1.056346025,
+        "Pop_growth_2005_2010": 1.053068438,
+        "Pop_growth_2010_2015": 1.053219717
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -64,
+          -34
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Bahamas",
+        "Pop_growth_1980_1985": 1.114022596,
+        "Pop_growth_1985_1990": 1.092295892,
+        "Pop_growth_1990_1995": 1.09288445,
+        "Pop_growth_1995_2000": 1.06332322,
+        "Pop_growth_2000_2005": 1.105240189,
+        "Pop_growth_2005_2010": 1.095948244,
+        "Pop_growth_2010_2015": 1.075354045
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76,
+          24.15
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Barbados",
+        "Pop_growth_1980_1985": 1.014789849,
+        "Pop_growth_1985_1990": 1.017348494,
+        "Pop_growth_1990_1995": 1.017628759,
+        "Pop_growth_1995_2000": 1.018417874,
+        "Pop_growth_2000_2005": 1.015453602,
+        "Pop_growth_2005_2010": 1.02029123,
+        "Pop_growth_2010_2015": 1.016596917
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -59.32,
+          13.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Belize",
+        "Pop_growth_1980_1985": 1.144086022,
+        "Pop_growth_1985_1990": 1.137218045,
+        "Pop_growth_1990_1995": 1.103492402,
+        "Pop_growth_1995_2000": 1.194965211,
+        "Pop_growth_2000_2005": 1.145444988,
+        "Pop_growth_2005_2010": 1.135307823,
+        "Pop_growth_2010_2015": 1.117160536
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.45,
+          17.15
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Bolivia",
+        "Pop_growth_1980_1985": 1.111275107,
+        "Pop_growth_1985_1990": 1.103790519,
+        "Pop_growth_1990_1995": 1.103623701,
+        "Pop_growth_1995_2000": 1.102130117,
+        "Pop_growth_2000_2005": 1.094238151,
+        "Pop_growth_2005_2010": 1.086882672,
+        "Pop_growth_2010_2015": 1.081309707
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -65,
+          -17
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Brazil",
+        "Pop_growth_1980_1985": 1.119776952,
+        "Pop_growth_1985_1990": 1.099072374,
+        "Pop_growth_1990_1995": 1.0821973,
+        "Pop_growth_1995_2000": 1.0800675,
+        "Pop_growth_2000_2005": 1.072205797,
+        "Pop_growth_2005_2010": 1.053772341,
+        "Pop_growth_2010_2015": 1.046488718
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -55,
+          -10
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Canada",
+        "Pop_growth_1980_1985": 1.054853007,
+        "Pop_growth_1985_1990": 1.071274381,
+        "Pop_growth_1990_1995": 1.056241229,
+        "Pop_growth_1995_2000": 1.048228521,
+        "Pop_growth_2000_2005": 1.050123986,
+        "Pop_growth_2005_2010": 1.052403751,
+        "Pop_growth_2010_2015": 1.054300407
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -100,
+          60
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Chile",
+        "Pop_growth_1980_1985": 1.077818546,
+        "Pop_growth_1985_1990": 1.09,
+        "Pop_growth_1990_1995": 1.080113688,
+        "Pop_growth_1995_2000": 1.068789678,
+        "Pop_growth_2000_2005": 1.061051825,
+        "Pop_growth_2005_2010": 1.057060604,
+        "Pop_growth_2010_2015": 1.054839098
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71,
+          -30
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Colombia",
+        "Pop_growth_1980_1985": 1.118025878,
+        "Pop_growth_1985_1990": 1.11,
+        "Pop_growth_1990_1995": 1.092508774,
+        "Pop_growth_1995_2000": 1.07910853,
+        "Pop_growth_2000_2005": 1.071321722,
+        "Pop_growth_2005_2010": 1.060816012,
+        "Pop_growth_2010_2015": 1.050320026
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72,
+          4
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Costa Rica",
+        "Pop_growth_1980_1985": 1.142685545,
+        "Pop_growth_1985_1990": 1.133966735,
+        "Pop_growth_1990_1995": 1.134024981,
+        "Pop_growth_1995_2000": 1.118065584,
+        "Pop_growth_2000_2005": 1.082128164,
+        "Pop_growth_2005_2010": 1.070019116,
+        "Pop_growth_2010_2015": 1.057769945
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84,
+          10
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Cuba",
+        "Pop_growth_1980_1985": 1.025196285,
+        "Pop_growth_1985_1990": 1.049498214,
+        "Pop_growth_1990_1995": 1.030614964,
+        "Pop_growth_1995_2000": 1.01932322,
+        "Pop_growth_2000_2005": 1.012976768,
+        "Pop_growth_2005_2010": 1.004180782,
+        "Pop_growth_2010_2015": 1.007201014
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80,
+          21.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Dominican Republic",
+        "Pop_growth_1980_1985": 1.116983717,
+        "Pop_growth_1985_1990": 1.107074278,
+        "Pop_growth_1990_1995": 1.098664328,
+        "Pop_growth_1995_2000": 1.08491692,
+        "Pop_growth_2000_2005": 1.078825173,
+        "Pop_growth_2005_2010": 1.071491745,
+        "Pop_growth_2010_2015": 1.063690773
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.4,
+          19
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Ecuador",
+        "Pop_growth_1980_1985": 1.134085966,
+        "Pop_growth_1985_1990": 1.129571368,
+        "Pop_growth_1990_1995": 1.119640872,
+        "Pop_growth_1995_2000": 1.103842637,
+        "Pop_growth_2000_2005": 1.087628874,
+        "Pop_growth_2005_2010": 1.08732726,
+        "Pop_growth_2010_2015": 1.080997329
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.3,
+          -2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "El Salvador",
+        "Pop_growth_1980_1985": 1.074983398,
+        "Pop_growth_1985_1990": 1.06729419,
+        "Pop_growth_1990_1995": 1.064100318,
+        "Pop_growth_1995_2000": 1.039919553,
+        "Pop_growth_2000_2005": 1.023292107,
+        "Pop_growth_2005_2010": 1.015318107,
+        "Pop_growth_2010_2015": 1.014618329
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.55,
+          13.5
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Guatemala",
+        "Pop_growth_1980_1985": 1.14031773,
+        "Pop_growth_1985_1990": 1.128247613,
+        "Pop_growth_1990_1995": 1.130894083,
+        "Pop_growth_1995_2000": 1.128537705,
+        "Pop_growth_2000_2005": 1.127888056,
+        "Pop_growth_2005_2010": 1.117477149,
+        "Pop_growth_2010_2015": 1.109327422
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.15,
+          15.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Guyana",
+        "Pop_growth_1980_1985": 0.972578533,
+        "Pop_growth_1985_1990": 0.941493255,
+        "Pop_growth_1990_1995": 1.0089132,
+        "Pop_growth_1995_2000": 1.021356818,
+        "Pop_growth_2000_2005": 1.000377247,
+        "Pop_growth_2005_2010": 1.014626263,
+        "Pop_growth_2010_2015": 1.018225019
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -59,
+          5
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Honduras",
+        "Pop_growth_1980_1985": 1.165457416,
+        "Pop_growth_1985_1990": 1.157151488,
+        "Pop_growth_1990_1995": 1.140267082,
+        "Pop_growth_1995_2000": 1.116602339,
+        "Pop_growth_2000_2005": 1.102048989,
+        "Pop_growth_2005_2010": 1.090651698,
+        "Pop_growth_2010_2015": 1.076117955
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -86.3,
+          15
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Jamaica",
+        "Pop_growth_1980_1985": 1.083497421,
+        "Pop_growth_1985_1990": 1.034139587,
+        "Pop_growth_1990_1995": 1.037656904,
+        "Pop_growth_1995_2000": 1.044108871,
+        "Pop_growth_2000_2005": 1.020935433,
+        "Pop_growth_2005_2010": 1.017862006,
+        "Pop_growth_2010_2015": 1.013051783
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.3,
+          18.15
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Mexico",
+        "Pop_growth_1980_1985": 1.1152684,
+        "Pop_growth_1985_1990": 1.107171199,
+        "Pop_growth_1990_1995": 1.102997451,
+        "Pop_growth_1995_2000": 1.088763219,
+        "Pop_growth_2000_2005": 1.067497473,
+        "Pop_growth_2005_2010": 1.080818213,
+        "Pop_growth_2010_2015": 1.070813136
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -102,
+          23
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Nicaragua",
+        "Pop_growth_1980_1985": 1.141290066,
+        "Pop_growth_1985_1990": 1.117406156,
+        "Pop_growth_1990_1995": 1.112839481,
+        "Pop_growth_1995_2000": 1.089882768,
+        "Pop_growth_2000_2005": 1.070132232,
+        "Pop_growth_2005_2010": 1.066623539,
+        "Pop_growth_2010_2015": 1.060008157
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -85,
+          13
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Panama",
+        "Pop_growth_1980_1985": 1.121652903,
+        "Pop_growth_1985_1990": 1.11342868,
+        "Pop_growth_1990_1995": 1.108101546,
+        "Pop_growth_1995_2000": 1.106138131,
+        "Pop_growth_2000_2005": 1.095930664,
+        "Pop_growth_2005_2010": 1.090745037,
+        "Pop_growth_2010_2015": 1.085244896
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80,
+          9
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Paraguay",
+        "Pop_growth_1980_1985": 1.154434813,
+        "Pop_growth_1985_1990": 1.147585809,
+        "Pop_growth_1990_1995": 1.129839525,
+        "Pop_growth_1995_2000": 1.11381371,
+        "Pop_growth_2000_2005": 1.092931903,
+        "Pop_growth_2005_2010": 1.071502151,
+        "Pop_growth_2010_2015": 1.069122109
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58,
+          -23
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Peru",
+        "Pop_growth_1980_1985": 1.125918249,
+        "Pop_growth_1985_1990": 1.116741665,
+        "Pop_growth_1990_1995": 1.101348534,
+        "Pop_growth_1995_2000": 1.078045623,
+        "Pop_growth_2000_2005": 1.06542689,
+        "Pop_growth_2005_2010": 1.063861058,
+        "Pop_growth_2010_2015": 1.068191412
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76,
+          -10
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Suriname",
+        "Pop_growth_1980_1985": 1.023953911,
+        "Pop_growth_1985_1990": 1.099092793,
+        "Pop_growth_1990_1995": 1.091971196,
+        "Pop_growth_1995_2000": 1.078325819,
+        "Pop_growth_2000_2005": 1.023400936,
+        "Pop_growth_2005_2010": 1.053130081,
+        "Pop_growth_2010_2015": 1.047940711
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -56,
+          4
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Trinidad and Tobago",
+        "Pop_growth_1980_1985": 1.078889902,
+        "Pop_growth_1985_1990": 1.043529502,
+        "Pop_growth_1990_1995": 1.02708896,
+        "Pop_growth_1995_2000": 1.010342629,
+        "Pop_growth_2000_2005": 1.02283159,
+        "Pop_growth_2005_2010": 1.02403368,
+        "Pop_growth_2010_2015": 1.024087042
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -61,
+          11
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "United States",
+        "Pop_growth_1980_1985": 1.047085488,
+        "Pop_growth_1985_1990": 1.05,
+        "Pop_growth_1990_1995": 1.07,
+        "Pop_growth_1995_2000": 1.059653482,
+        "Pop_growth_2000_2005": 1.047328026,
+        "Pop_growth_2005_2010": 1.046800281,
+        "Pop_growth_2010_2015": 1.039024026
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97,
+          38
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Uruguay",
+        "Pop_growth_1980_1985": 1.03296888,
+        "Pop_growth_1985_1990": 1.032564054,
+        "Pop_growth_1990_1995": 1.036919733,
+        "Pop_growth_1995_2000": 1.029902537,
+        "Pop_growth_2000_2005": 1.001315774,
+        "Pop_growth_2005_2010": 1.014674,
+        "Pop_growth_2010_2015": 1.016933331
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -56,
+          -33
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Venezuela",
+        "Pop_growth_1980_1985": 1.141042185,
+        "Pop_growth_1985_1990": 1.134446649,
+        "Pop_growth_1990_1995": 1.117144028,
+        "Pop_growth_1995_2000": 1.103332467,
+        "Pop_growth_2000_2005": 1.093443697,
+        "Pop_growth_2005_2010": 1.083178678,
+        "Pop_growth_2010_2015": 1.072850012
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66,
+          8
+        ]
+      }
+    }
+  ]
+}
