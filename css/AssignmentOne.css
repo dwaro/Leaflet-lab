@@ -1,0 +1,32 @@
+/* AssignmentOne stylesheet by David J. Waro, 2017 G575 */
+
+body {
+  background-color: rgba(0, 255, 204, 0.1);
+}
+
+#mydiv {
+  position: fixed;
+  top: 12.5%;
+  left: 77.5%;
+}
+
+th {
+  text-align: left;
+}
+
+#mapid {
+  border-style: solid;
+  border-width: medium;
+  border-radius: 2em;
+  height: 50em;
+  width: 45%;
+  position: fixed;
+  top: 12.5%;
+  left: 27.5%;
+}
+
+#title {
+  font-family: Didot, Helvetica, serif;
+  font-size: 3em;
+  text-align: center;
+}
