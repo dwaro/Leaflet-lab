@@ -7,7 +7,7 @@ body {
 #mydiv {
   position: fixed;
   top: 12.5%;
-  left: 77.5%;
+  left: 80%;
 }
 
 th {
@@ -19,14 +19,47 @@ th {
   border-width: medium;
   border-radius: 2em;
   height: 50em;
-  width: 45%;
+  width: 55%;
   position: fixed;
   top: 12.5%;
-  left: 27.5%;
+  left: 22.5%;
+  display: inline-block;
 }
 
 #title {
+  text-align: center;
   font-family: Didot, Helvetica, serif;
   font-size: 3em;
-  text-align: center;
+  margin: 10px;
+}
+
+#infoPanel {
+  width: 18%;
+  display: inline-block;
+  top: 100px;
+  vertical-align: bottom;
+  position: relative;
+  left: 25px;
+  text-align: left;
+
+}
+
+.range-slider {
+    width: 50%;
+}
+
+#forward {
+    float: right;
+}
+
+#reverse {
+    float: left;
+}
+/*#panelP {
+  width: 100%;
+  display: inline-block;
+}*/
+
+.leaflet-popup-content p {
+  margin:  0.2em 0;
 }
