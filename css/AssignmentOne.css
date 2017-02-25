@@ -49,16 +49,45 @@ th {
   height: 100px;
 }
 
-#slider {
-  width: 14em;
-  top: 86%;
-  left: 25%;
-  position:fixed;
-  display: inline-block;
+.sequence-control-container {
+    width: 350px;
+    height: 25px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 6px;
+    line-height: 35px;
+    text-align: center;
+    border: solid gray 1px;
+}
+
+.legend-control-container {
+  width: 350px;
+  height: 25px;
+  background-color: rgba(255,255,255,0.8);
+  padding: 6px;
+  line-height: 35px;
+  text-align: center;
+  border: solid gray 1px;
+}
+
+#choro {
+  height: 40px;
+  width: 100px;
+  left: 50px;
+  top: 400px;
+  background-color: rgba(255,255,255,0.8);
+  position: fixed;
+  border: solid black 1px;
+
+}
+
+.reexpress {
+  top: 410px;
+  left: 63px;
+  position: fixed;
 }
 
 .range-slider {
-    width: 50%;
+    width: 200px;
 }
 
 #forward {
@@ -68,10 +97,6 @@ th {
 #reverse {
     float: left;
 }
-/*#panelP {
-  width: 100%;
-  display: inline-block;
-}*/
 
 .leaflet-popup-content p {
   margin:  0.2em 0;

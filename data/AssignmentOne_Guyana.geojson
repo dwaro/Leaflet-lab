@@ -156,8 +156,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -72,
-          -36
+          -71,
+          -30
         ]
       }
     },
@@ -276,8 +276,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -89,
-          13.7
+          -88.55,
+          13.5
         ]
       }
     },
@@ -298,6 +298,26 @@
         "coordinates": [
           -90.15,
           15.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Guyana",
+        "Pop_growth_1980_1985": 0.972578533,
+        "Pop_growth_1985_1990": 0.941493255,
+        "Pop_growth_1990_1995": 1.0089132,
+        "Pop_growth_1995_2000": 1.021356818,
+        "Pop_growth_2000_2005": 1.000377247,
+        "Pop_growth_2005_2010": 1.014626263,
+        "Pop_growth_2010_2015": 1.018225019
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -59,
+          5
         ]
       }
     },

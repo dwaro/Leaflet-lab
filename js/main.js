@@ -164,32 +164,40 @@ function addEvents(){
 // Title added
 $("#title").append('Western Hemisphere Population Growth 1980-2015');
 
+//$("#choro").append('<button class="reexpress" title="Reexpress">Choropleth</button>');
+
 ////////////////////////////////////////////////////////////////////////////////
 /* Code for Map div */
 
 
 //function to instantiate the Leaflet map
 function createMap(){
+
   //create the map
   var map = L.map('mapid', {
     center: [15, -75],
     zoom: 2
   });
 
-  // https: also suppported.
-  var Esri_WorldGrayCanvas = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-	   attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-      minZoom: 2,
-      maxZoom: 10,
-  }).addTo(map);
+  $("#choro").append('<button class="reexpress" title="Reexpress">Choropleth</button>');
 
-  //calls getData function
-  getData(map);
+    var MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+      minZoom: 2,
+      maxZoom: 6,
+    });
+
+    // https: also suppported.
+    var Countries_Light = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizk7j6xc00052so1e41ow871/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+	    attribution: '',
+      minZoom: 2,
+      maxZoom: 6,
+    }).addTo(map);
+
+    //calls getData function
+    getData(map, MapboxLayer, Countries_Light);
 
 // close to createMap
 };
-
-//////////////////////////////////////////////////////////
 
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
@@ -247,14 +255,12 @@ function pointToLayer(feature, latlng, attributes){
     panelContent += "<p><b>Population growth from " + yearOne + " to "
       + yearTwo + ":</b> " + parseFloat(((feature.properties[attribute]) - 1) * 100).toFixed(2)
       + "% </p>";
-    //popup content is now just the city name
-    var popupContent = feature.properties.Country;
 
-    //Example 2.1 line 27...bind the popup to the circle marker
-    layer.bindPopup(popupContent, {
-        offset: new L.Point(0,-options.radius),
-        closeButton: false
-    });
+    //Example 1.3 line 6...in UpdatePropSymbols()
+    var popup = new Popup(feature.properties, layer, options.radius);
+
+    //add popup to circle marker
+    popup.bindToLayer();
 
     //event listeners to open popup on hover
     layer.on({
@@ -274,19 +280,75 @@ function pointToLayer(feature, latlng, attributes){
 };
 
 //Add circle markers for point features to the map
-function createPropSymbols(data, map, attributes){
+function createPropSymbols(data, map, attributes, MapboxLayer, Countries_Light){
     //create a Leaflet GeoJSON layer and add it to the map
-    L.geoJson(data, {
+    var proportionalSymbols = L.geoJson(data, {
         pointToLayer: function(feature, latlng){
             return pointToLayer(feature, latlng, attributes);
         }
-    }).addTo(map);
+    });
+
+    changeMap(map, MapboxLayer, Countries_Light, proportionalSymbols);
+
+};
+
+function changeMap (map, MapboxLayer, Countries_Light, proportionalSymbols) {
+
+  var maptype = 1;
+  map.addLayer(proportionalSymbols);
+
+  $('.reexpress').click( function() {
+
+    if (maptype == 1) {
+      map.removeLayer(Countries_Light);
+      map.removeLayer(proportionalSymbols);
+      map.addLayer(MapboxLayer);
+      maptype = 0;
+    } else {
+      map.removeLayer(MapboxLayer);
+      map.addLayer(proportionalSymbols);
+      map.addLayer(Countries_Light);
+      maptype = 1;
+    };
+
+  });
+
 };
 
 //Step 1: Create new sequence controls
 function createSequenceControls(map, attributes){
-  //create range input element (slider)
-  $('#slider').append('<input class="range-slider" type="range">');
+
+  var SequenceControl = L.Control.extend({
+      options: {
+          position: 'bottomleft'
+      },
+
+      onAdd: function (map) {
+          // create the control container div with a particular class name
+          var container = L.DomUtil.create('div', 'sequence-control-container');
+
+          //create range input element (slider)
+          $(container).append('<input class="range-slider" type="range">');
+
+          //add skip buttons
+          $(container).append('<button class="skip" id="reverse" title="Reverse">Reverse</button>');
+          // Adds reverse image.
+          //$('#reverse').html('<img src="img/reverse.png">');
+
+          $(container).append('<button class="skip" id="forward" title="Forward">Skip</button>');
+          // Adds forward image.  Right arrow by Guilhem from the Noun Project
+          //$('#forward').html('<img src="lib/images/forward.png">');
+
+          //kill any mouse event listeners on the map
+          $(container).on('mousedown dblclick', function(e){
+            L.DomEvent.stopPropagation(e);
+          });
+
+          return container;
+      }
+  });
+
+  map.addControl(new SequenceControl());
 
   //set slider attributes
   $('.range-slider').attr({
@@ -295,16 +357,6 @@ function createSequenceControls(map, attributes){
     value: 0,
     step: 1
   });
-
-  // step / reverse button
-  $('#slider').append('<button class="skip" id="reverse">Reverse</button>');
-  // Adds reverse image.
-  //$('#reverse').html('<img src="img/reverse.png">');
-
-  // step / forward button
-  $('#slider').append('<button class="skip" id="forward">Skip</button>');
-  // Adds forward image.  Right arrow by Guilhem from the Noun Project
-  //$('#forward').html('<img src="lib/images/forward.png">');
 
   // input listener for slider
   $('.range-slider').on('input', function(){
@@ -334,7 +386,50 @@ function createSequenceControls(map, attributes){
        $('.range-slider').val(index);
 
        updatePropSymbols(map, attributes[index]);
+       
    });
+
+};
+
+//OOM Popup constructor function
+function Popup(properties, layer, radius){
+  this.properties = properties;
+  this.layer = layer;
+  this.content = "<p><b>Country:</b> " + this.properties.Country + "</p>";
+
+  this.bindToLayer = function(){
+    this.layer.bindPopup(this.content, {
+      offset: new L.Point(0,-radius),
+      closeButton: false
+    });
+  };
+};
+
+function createLegend(map, attributes){
+
+  var LegendControl = L.Control.extend({
+    options: {
+      position: 'bottomright'
+    },
+
+    onAdd: function (map) {
+
+      // create the control container with a particular class name
+      var legendContainer = L.DomUtil.create('div', 'legend-control-container');
+
+      $(legendContainer).append(attribute.split("_")[2] + " - " + attribute.split("_")[3]);
+
+      //kill any mouse event listeners on the map
+      // $(legendContainer).on('mousedown dblclick', function(e){
+      //   L.DomEvent.stopPropagation(e);
+      // });
+
+      return legendContainer;
+
+    }
+  });
+
+  map.addControl(new LegendControl());
 
 };
 
@@ -342,6 +437,7 @@ function createSequenceControls(map, attributes){
 function updatePropSymbols(map, attribute){
     map.eachLayer(function(layer){
       if (layer.feature && layer.feature.properties[attribute]){
+
             //access feature properties
             var props = layer.feature.properties;
 
@@ -364,13 +460,11 @@ function updatePropSymbols(map, attribute){
             panelContent += "<p><b>Population growth from " + year + " to " + yearDos + ":</b> "
             + parseFloat(((props[attribute]) - 1) * 100).toFixed(2) + "% </p>";
 
-            //popup content is now just the city name
-            var popupContent = props.Country;
+            //Example 1.3 line 6...in UpdatePropSymbols()
+            var popup = new Popup(props, layer, radius);
 
-            //replace the layer popup
-            layer.bindPopup(popupContent, {
-                offset: new L.Point(0,-radius)
-            });
+            //add popup to circle marker
+            popup.bindToLayer();
 
             //event listeners to open popup on hover
             layer.on({
@@ -384,6 +478,7 @@ function updatePropSymbols(map, attribute){
                   $("#infoPanel").html(panelContent);
                 }
             });
+
         };
     });
 };
@@ -408,7 +503,7 @@ function processData(data){
 };
 
 //Step 2: Import GeoJSON data
-function getData(map){
+function getData(map, MapboxLayer, Countries_Light){
     //load the data
     $.ajax("data/AssignmentOne.geojson", {
         dataType: "json",
@@ -418,7 +513,7 @@ function getData(map){
           var attributes = processData(response);
 
           //call function to create proportional symbols
-          createPropSymbols(response, map, attributes);
+          createPropSymbols(response, map, attributes, MapboxLayer, Countries_Light);
           createSequenceControls(map, attributes);
         }
     });
