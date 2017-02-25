@@ -43,7 +43,7 @@ th {
   display: inline-block;
   top: 100px;
   vertical-align: bottom;
-  position: relative;
+  position: fixed;
   left: 25px;
   text-align: left;
   height: 100px;
