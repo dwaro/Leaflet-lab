@@ -2,171 +2,18 @@
 
 //initialize function called when the script loads
 function initialize(){
-
-    cities();
     createMap();
-
 };
 
-//function to create a table with cities and their populations
-function cities(){
 
-    //defines an object for cities and population
-    var cityPop = [
-        {
-            city: 'Seattle',
-            population: 652405
 
-        },
-        {
-            city: 'Salt Lake City',
-            population: 191180
-        },
-        {
-            city: 'Boulder',
-            population: 103166
-        },
-        {
-            city: 'Portland',
-            population: 609456
-        }
-    ];
 
-    //append the table element to the div
-    $("#mydiv").append("<table>");
-
-    //append a header row to the table
-    $("table").append("<tr>");
-
-    //add the "City" and "Population" columns to the header row
-    $("tr").append("<th>Country</th><th>Population Change</th>");
-
-    //loop to add a new row for each city
-    for (var i = 0; i < cityPop.length; i++){
-
-        //assign longer html strings to a variable
-        var rowHtml = "<tr><td>" + cityPop[i].city + "</td><td>" + cityPop[i].population + "</td></tr>";
-
-        //add the row's html string to the table
-        $("table").append(rowHtml);
-
-    // for loop close
-    };
-
-    //Call addColumns function
-    addColumns(cityPop);
-
-    //Call addEvents function
-    addEvents(cityPop);
-
-// cities function close
-};
-
-// Function to add columns of the city population description
-function addColumns(cityPop){
-
-  // For each loop with an anonymous function to look at the different populations
-  $('tr').each(function(i){
-
-    // if statement to set the first cell of the column to the City Size table
-    // header
-    if (i == 0){
-
-      // appends 'City Size' as the column header
-      $(this).append('<th>Growth Rank</th>');
-
-    } else {
-
-        // create a variable for city size
-        var citySize;
-
-        // Assigns Small to populations of less than 100,000
-        if (cityPop[i-1].population < 100000){
-
-          citySize = 'Small';
-
-          // Assigns Medium to populations less than 100,000 < x < 500,000
-        } else if (cityPop[i-1].population < 500000){
-
-          citySize = 'Medium';
-
-          // Defaults to a large city assignment
-        } else {
-
-          citySize = 'Large';
-
-        };
-
-    // appends the city size to the document
-    $(this).append('<td>' + citySize + '</td>');
-
-    // Original else close
-    };
-
-  // Loop close
-  });
-
-// addColumns function close
-};
-
-// function to addEvents to the div
-function addEvents(){
-
-  $('table').mouseover(function() {
-
-    // set a color variable
-    var color = "rgb(";
-
-    // for loop to create a random color
-	  for (var i = 0; i < 3; i++) {
-
-      // random number
-      var random = Math.round(Math.random() * 255);
-
-      // add the random number to the different color spots
-	  	color += random;
-
-	  	if (i < 2) {
-
-        // adds the , to color to separate the random numbers
-        color += ",";
-
-	  	} else {
-
-        // adds the closing parentheses for the color
-        color += ")";
-
-	   	};
-
-      // table color changes when mouseover event occurs
-	  	$(this).css('color', color);
-      //$(this).css('color', "rgb(0, 255, 204)");
-
-    // loop close
-	  };
-
-  // close for mouseover event
-  });
-
-  // function to give an alert
-   function clickme(){
-
-     alert('Hey, you clicked me!');
-
-   };
-
-   // call clickme function when table is clicked
-   $('table').on('click', clickme);
-
-// addEvents function close
-};
 
 // Title added
 $("#title").append('Western Hemisphere Population Growth 1980-2015');
 
 
-////////////////////////////////////////////////////////////////////////////////
-/* Code for Map div */
+
 
 
 //function to instantiate the Leaflet map
@@ -175,6 +22,7 @@ function createMap(){
   //create the map
   var map = L.map('mapid', {
     center: [15, -75],
+    maxBounds: [ [-80, -250], [80, 150] ],
     zoom: 2
   });
 
@@ -231,31 +79,25 @@ function pointToLayer(feature, latlng, attributes, layer){
 
   // create marker options
   var options = {
-    fillColor: "rgb(0, 255, 204)",
+    //fillColor: "rgb(0, 255, 204)",
     color: "#000",
     weight: 1,
     opacity: 1,
-    fillOpacity: 0.4
-  };
-
-  var popDecline = {
-    fillColor: "rgb(128,0,0)",
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.4
+    fillOpacity: 0.7
   };
 
   // For each feature, determine its value for the selected attribute
   var attValue = Number(feature.properties[attribute]) - 1;
 
   if (attValue > 0) {
+    options.fillColor = "#ef8a62";
     options.radius = calcPropRadius((attValue * 100));
     var layer = L.circleMarker(latlng, options);
   } else {
+    options.fillColor = "#67a9cf";
     attValue = ((1 - Number(feature.properties[attribute]))* 100);
-    popDecline.radius = calcPropRadius(attValue);
-    var layer = L.circleMarker(latlng, popDecline);
+    options.radius = calcPropRadius(attValue);
+    var layer = L.circleMarker(latlng, options);
   };
 
   // build popup content string starting with city...Example 2.1 line 24
@@ -302,7 +144,7 @@ function search (map, data, proportionalSymbols){
 
   // new variable search control
   var searchLayer = new L.Control.Search({
-    position: 'topright',  // positions the operator in the top right of the screen
+    position: 'topleft',  // positions the operator in the top right of the screen
     layer: proportionalSymbols,  //use proportionalSymbols as the layer to search through
     propertyName: 'Country',  // search for country name
     marker: false,
@@ -584,6 +426,7 @@ function createSequenceControls(map, attributes, index){
 
 // OOM Popup constructor function
 function Popup(properties, layer, radius){
+
   this.properties = properties;
   this.layer = layer;
   this.content = "<p><b>Country:</b> " + this.properties.Country + "</p>";
@@ -594,6 +437,21 @@ function Popup(properties, layer, radius){
       closeButton: false
     });
   };
+};
+
+
+
+
+
+function updateLegend(map, attribute){
+
+      var yearUno = attribute.split("_")[2];
+      var yearTwo = attribute.split("_")[3];
+
+      var legendContent = "<b>Population Growth from: " + yearUno + " to " + yearTwo + '</b>';
+
+      $('#temporal-legend').html(legendContent);
+
 };
 
 
@@ -613,12 +471,12 @@ function createLegend(map, attributes){
       // create the control container with a particular class name
       var legendContainer = L.DomUtil.create('div', 'legend-control-container');
 
-      $(legendContainer).append(attribute.split("_")[2] + " - " + attribute.split("_")[3]);
+      $(legendContainer).append('<div id="temporal-legend" >');
 
       //kill any mouse event listeners on the map
-      // $(legendContainer).on('mousedown dblclick', function(e){
-      //   L.DomEvent.stopPropagation(e);
-      // });
+      $(legendContainer).on('mousedown dblclick', function(e){
+        L.DomEvent.stopPropagation(e);
+      });
 
       return legendContainer;
 
@@ -627,6 +485,7 @@ function createLegend(map, attributes){
 
   // add the legendControl to the map
   map.addControl(new LegendControl());
+  updateLegend(map, attributes[0]);
 
 }; // close to createLegend function
 
@@ -646,14 +505,17 @@ function updatePropSymbols(map, attribute){
       // access feature properties
       var props = layer.feature.properties;
 
-      // update each feature's radius based on new attribute values
-      var radius = calcPropRadius(((props[attribute]) - 1) * 100);
+      var attValue = Number(props[attribute]) - 1;
 
-      if (radius > 0) {
-        layer.setRadius(radius);
+      if (attValue > 0) {
+        layer.fillColor = "#ef8a62";
       } else {
-        layer.setRadius(radius);
+        layer.fillColor = "#67a9cf";
+        attValue = (1 - Number(props[attribute]));
       }
+
+      var radius = calcPropRadius(attValue * 100);
+      layer.setRadius(radius);
 
       // add country to popup content string
       var panelContent = "<p><b>Country:</b> " + props.Country + "</p>";
@@ -684,8 +546,11 @@ function updatePropSymbols(map, attribute){
           $("#infoPanel").html(panelContent);
         }
       }); // close to layer.on
+      //createLegend(map, attribute);
     }; // close to if statement
+
   }); // close to eachLayer function
+  updateLegend(map, attribute); // update the temporal-legend
 }; // close to updatePropSymbols function
 
 
@@ -734,6 +599,7 @@ function getData(map, MapboxLayer, Countries_Light){
       //call function to create proportional symbols
       createPropSymbols(response, map, attributes, MapboxLayer, Countries_Light);
       createSequenceControls(map, attributes, MapboxLayer);
+      createLegend(map, attributes);
 
     } // close to success
   }); // close to ajax

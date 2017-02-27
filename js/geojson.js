@@ -25,6 +25,14 @@
 //9. Reassign the current attribute based on the new attributes array index
 //10. Resize proportional symbols according to each feature's value for the new attribute
 
+//initialize function called when the script loads
+function initialize(){
+
+    cities();
+    createMap();
+
+};
+
 //function to instantiate the Leaflet map
 function createMap(){
   //create the map
@@ -296,4 +304,160 @@ function getData(map){
     });
 };
 
-$(document).ready(createMap);
+
+//////////////////////////////////////////////////////////////////////////////////
+
+//function to create a table with cities and their populations
+function cities(){
+
+    //defines an object for cities and population
+    var cityPop = [
+        {
+            city: 'Seattle',
+            population: 652405
+
+        },
+        {
+            city: 'Salt Lake City',
+            population: 191180
+        },
+        {
+            city: 'Boulder',
+            population: 103166
+        },
+        {
+            city: 'Portland',
+            population: 609456
+        }
+    ];
+
+    //append the table element to the div
+    $("#mydiv").append("<table>");
+
+    //append a header row to the table
+    $("table").append("<tr>");
+
+    //add the "City" and "Population" columns to the header row
+    $("tr").append("<th>Country</th><th>Population Change</th>");
+
+    //loop to add a new row for each city
+    for (var i = 0; i < cityPop.length; i++){
+
+        //assign longer html strings to a variable
+        var rowHtml = "<tr><td>" + cityPop[i].city + "</td><td>" + cityPop[i].population + "</td></tr>";
+
+        //add the row's html string to the table
+        $("table").append(rowHtml);
+
+    // for loop close
+    };
+
+    //Call addColumns function
+    addColumns(cityPop);
+
+    //Call addEvents function
+    addEvents(cityPop);
+
+// cities function close
+};
+
+// Function to add columns of the city population description
+function addColumns(cityPop){
+
+  // For each loop with an anonymous function to look at the different populations
+  $('tr').each(function(i){
+
+    // if statement to set the first cell of the column to the City Size table
+    // header
+    if (i == 0){
+
+      // appends 'City Size' as the column header
+      $(this).append('<th>Growth Rank</th>');
+
+    } else {
+
+        // create a variable for city size
+        var citySize;
+
+        // Assigns Small to populations of less than 100,000
+        if (cityPop[i-1].population < 100000){
+
+          citySize = 'Small';
+
+          // Assigns Medium to populations less than 100,000 < x < 500,000
+        } else if (cityPop[i-1].population < 500000){
+
+          citySize = 'Medium';
+
+          // Defaults to a large city assignment
+        } else {
+
+          citySize = 'Large';
+
+        };
+
+    // appends the city size to the document
+    $(this).append('<td>' + citySize + '</td>');
+
+    // Original else close
+    };
+
+  // Loop close
+  });
+
+// addColumns function close
+};
+
+// function to addEvents to the div
+function addEvents(){
+
+  $('table').mouseover(function() {
+
+    // set a color variable
+    var color = "rgb(";
+
+    // for loop to create a random color
+	  for (var i = 0; i < 3; i++) {
+
+      // random number
+      var random = Math.round(Math.random() * 255);
+
+      // add the random number to the different color spots
+	  	color += random;
+
+	  	if (i < 2) {
+
+        // adds the , to color to separate the random numbers
+        color += ",";
+
+	  	} else {
+
+        // adds the closing parentheses for the color
+        color += ")";
+
+	   	};
+
+      // table color changes when mouseover event occurs
+	  	$(this).css('color', color);
+      //$(this).css('color', "rgb(0, 255, 204)");
+
+    // loop close
+	  };
+
+  // close for mouseover event
+  });
+
+  // function to give an alert
+   function clickme(){
+
+     alert('Hey, you clicked me!');
+
+   };
+
+   // call clickme function when table is clicked
+   $('table').on('click', clickme);
+
+// addEvents function close
+};
+
+$(document).ready(initialize);
