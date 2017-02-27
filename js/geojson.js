@@ -197,9 +197,12 @@ function createSequenceControls(map, attributes){
        $('.range-slider').val(index);
 
        updatePropSymbols(map, attributes[index]);
+
+
    });
 
 };
+
 
 // funtion to create popups
 function createPopup(properties, attribute, layer, radius){

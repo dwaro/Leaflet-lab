@@ -164,7 +164,6 @@ function addEvents(){
 // Title added
 $("#title").append('Western Hemisphere Population Growth 1980-2015');
 
-//$("#choro").append('<button class="reexpress" title="Reexpress">Choropleth</button>');
 
 ////////////////////////////////////////////////////////////////////////////////
 /* Code for Map div */
@@ -196,13 +195,14 @@ function createMap(){
     //calls getData function
     getData(map, MapboxLayer, Countries_Light);
 
+
 // close to createMap
 };
 
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
     //scale factor to adjust symbol size evenly
-    var scaleFactor = 30;
+    var scaleFactor = 50;
     //area based on attribute value and scale factor
     var area = attValue * scaleFactor;
     //radius calculated based on area
@@ -212,7 +212,7 @@ function calcPropRadius(attValue) {
 };
 
 //function to convert markers to circle markers
-function pointToLayer(feature, latlng, attributes){
+function pointToLayer(feature, latlng, attributes, layer){
     //Determine which attribute to visualize with proportional symbols
     var attribute = attributes[0];
 
@@ -279,6 +279,23 @@ function pointToLayer(feature, latlng, attributes){
     return layer;
 };
 
+function search (map, data, proportionalSymbols){
+
+  var searchLayer = new L.Control.Search({
+    position: 'topright',
+    layer: proportionalSymbols,
+    propertyName: 'Country',
+    marker: false,
+    moveToLocation: function (latlng, title, map) {
+      //var zoom = map.getBoundsZoom(latlng.layer.getBounds());
+      map.setView(latlng, 13);
+    }
+  });
+
+    map.addControl (searchLayer);
+
+};
+
 //Add circle markers for point features to the map
 function createPropSymbols(data, map, attributes, MapboxLayer, Countries_Light){
     //create a Leaflet GeoJSON layer and add it to the map
@@ -286,123 +303,161 @@ function createPropSymbols(data, map, attributes, MapboxLayer, Countries_Light){
         pointToLayer: function(feature, latlng){
             return pointToLayer(feature, latlng, attributes);
         }
-    });
+    }).addTo(map);
 
-    changeMap(map, MapboxLayer, Countries_Light, proportionalSymbols);
+    search(map, data, proportionalSymbols)
 
-};
-
-
-function changeMap (map, MapboxLayer, Countries_Light, proportionalSymbols) {
-
-  var maptype = 1;
-  map.addLayer(proportionalSymbols);
-
-  $('.reexpress').click( function() {
-
-    if (maptype == 1) {
-      map.removeLayer(Countries_Light);
-      map.removeLayer(proportionalSymbols);
-      map.addLayer(MapboxLayer);
-      maptype = 0;
-    } else {
-      map.removeLayer(MapboxLayer);
-      map.addLayer(proportionalSymbols);
-      map.addLayer(Countries_Light);
-      maptype = 1;
-    };
-
-    updateChoropleth(map, MapboxLayer, proportionalSymbols, Countries_Light);
-
-  });
+    //changeMap(map, MapboxLayer, Countries_Light, proportionalSymbols);
 
 };
 
-function updateChoropleth (map, MapboxLayer, proportionalSymbols, Countries_Light) {
-  //set slider attributes
-  $('.range-slider').attr({
-    max: 6,
-    min: 0,
-    value: 0,
-    step: 1
-  });
 
-  // input listener for slider
-  $('.range-slider').on('input', function(){
-    // get the new index value
-    var index = $(this).val();
-
-    changeMap(map, MapboxLayer, proportionalSymbols, Countries_Light);
-
-  });
-
-  $('.skip').click(function(){
-       //get the old index value
-       var index = $('.range-slider').val();
-
-       //Step 6: increment or decrement depending on button clicked
-       if ($(this).attr('id') == 'forward'){
-           index++;
-           //Step 7: if past the last attribute, wrap around to first attribute
-           index = index > 6 ? 0 : index;
-       } else if ($(this).attr('id') == 'reverse'){
-           index--;
-           //Step 7: if past the first attribute, wrap around to last attribute
-           index = index < 0 ? 6 : index;
-       };
-
-       // update slider
-       $('.range-slider').val(index);
-
-       var a = $('.range-slider').val(index);
-
-       console.log(index);
-
-       if ( index == 0) {
-         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-           minZoom: 2,
-           maxZoom: 5,
-         });
-      } else if ( index == 1 ){
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbkm14000f2so13h608wor/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 2,
-          maxZoom: 5,
-        });
-      } else if ( index == 2) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbwnf9000e2smzpu8c83cy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 2,
-          maxZoom: 5,
-        });
-      } else if ( index == 3) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbz2la000h2so1y9694crg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 2,
-          maxZoom: 5,
-        });
-      } else if ( index == 4) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc116j000g2smzbl37le49/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 2,
-          maxZoom: 5,
-        });
-      } else if ( index == 5) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc3koi000c2so96po7xgww/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 2,
-          maxZoom: 5,
-        });
-      } else {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc62js000d2so90z41gk4k/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 2,
-          maxZoom: 5,
-        });
-      };
-
-       changeMap(map, MapboxLayer, proportionalSymbols, Countries_Light);
-
-   });
-};
-
+// function changeMap (map, MapboxLayer, Countries_Light, proportionalSymbols) {
+//
+//   var maptype = 1;
+//   map.addLayer(proportionalSymbols);
+//
+//   $('.reexpress').click( function() {
+//
+//     updateChoropleth(map, MapboxLayer, proportionalSymbols, Countries_Light);
+//
+//     if (maptype == 1) {
+//       map.removeLayer(Countries_Light);
+//       map.removeLayer(proportionalSymbols);
+//       map.addLayer(MapboxLayer);
+//       maptype = 0;
+//     } else {
+//       map.removeLayer(MapboxLayer);
+//       map.addLayer(proportionalSymbols);
+//       map.addLayer(Countries_Light);
+//       maptype = 1;
+//     };
+//
+//   });
+//
+// };
+//
+// function updateChoropleth (map, MapboxLayer, proportionalSymbols, Countries_Light) {
+//
+//   //set slider attributes
+//   $('.range-slider').attr({
+//     max: 6,
+//     min: 0,
+//     value: 0,
+//     step: 1
+//   });
+//
+//   // input listener for slider
+//   $('.range-slider').on('input', function(){
+//     // get the new index value
+//     var index = $(this).val();
+//
+//     if ( index == 0) {
+//       MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//         minZoom: 2,
+//         maxZoom: 5,
+//       });
+//     } else if ( index == 1 ){
+//       MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbkm14000f2so13h608wor/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//         minZoom: 2,
+//         maxZoom: 5,
+//       });
+//     } else if ( index == 2) {
+//       MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbwnf9000e2smzpu8c83cy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//         minZoom: 2,
+//         maxZoom: 5,
+//       });
+//     } else if ( index == 3) {
+//       MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbz2la000h2so1y9694crg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//         minZoom: 2,
+//         maxZoom: 5,
+//       });
+//     } else if ( index == 4) {
+//       MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc116j000g2smzbl37le49/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//         minZoom: 2,
+//         maxZoom: 5,
+//       });
+//     } else if ( index == 5) {
+//       MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc3koi000c2so96po7xgww/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//         minZoom: 2,
+//         maxZoom: 5,
+//       });
+//     } else {
+//       MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc62js000d2so90z41gk4k/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//         minZoom: 2,
+//         maxZoom: 5,
+//       });
+//     };
+//
+//    console.log("slider index: " + index);
+//    changeMap(map, MapboxLayer, proportionalSymbols, Countries_Light);
+//
+//   });
+//
+//   $('.skip').click(function(){
+//        // get the old index value
+//        var index = $('.range-slider').val();
+//
+//        // increment or decrement depending on button clicked
+//        if ($(this).attr('id') == 'forward'){
+//            //index++;
+//            // if past the last attribute, wrap around to first attribute
+//            index = index > 6 ? 0 : index;
+//        } else if ($(this).attr('id') == 'reverse'){
+//            //index--;
+//            // if past the first attribute, wrap around to last attribute
+//            index = index < 0 ? 6 : index;
+//        };
+//
+//        // update slider
+//        $('.range-slider').val(index);
+//
+//        console.log(index);
+//
+//        if ( index == 0) {
+//          MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//            minZoom: 2,
+//            maxZoom: 5,
+//          });
+//       } else if ( index == 1 ){
+//         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbkm14000f2so13h608wor/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//           minZoom: 2,
+//           maxZoom: 5,
+//         });
+//       } else if ( index == 2) {
+//         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbwnf9000e2smzpu8c83cy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//           minZoom: 2,
+//           maxZoom: 5,
+//         });
+//       } else if ( index == 3) {
+//         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbz2la000h2so1y9694crg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//           minZoom: 2,
+//           maxZoom: 5,
+//         });
+//       } else if ( index == 4) {
+//         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc116j000g2smzbl37le49/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//           minZoom: 2,
+//           maxZoom: 5,
+//         });
+//       } else if ( index == 5) {
+//         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc3koi000c2so96po7xgww/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//           minZoom: 2,
+//           maxZoom: 5,
+//         });
+//       } else {
+//         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc62js000d2so90z41gk4k/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+//           minZoom: 2,
+//           maxZoom: 5,
+//         });
+//       };
+//
+//        changeMap(map, MapboxLayer, proportionalSymbols, Countries_Light);
+//
+//    });
+// };
 
 // Create new sequence controls
-function createSequenceControls(map, attributes){
+function createSequenceControls(map, attributes, index){
 
   var SequenceControl = L.Control.extend({
       options: {

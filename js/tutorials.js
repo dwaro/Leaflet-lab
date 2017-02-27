@@ -193,5 +193,5 @@ L.geoJSON(someFeatures, {
     }
 }).addTo(mymap);
 
-// when the map is clicked, calls the onMapClick function 
+// when the map is clicked, calls the onMapClick function
 mymap.on('click', onMapClick);
