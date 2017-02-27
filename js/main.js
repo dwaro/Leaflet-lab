@@ -178,140 +178,172 @@ function createMap(){
     zoom: 2
   });
 
+  // add in the choropleth button
   $("#choro").append('<button class="reexpress" title="Reexpress">Choropleth</button>');
 
-    var MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-      minZoom: 2,
-      maxZoom: 5,
-    });
+  // choropleth tile layer to be added with reexpress
+  var MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+    minZoom: 2,
+    maxZoom: 5,
+  });
 
-    // https: also suppported.
-    var Countries_Light = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizk7j6xc00052so1e41ow871/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-	    attribution: '',
-      minZoom: 2,
-      maxZoom: 5,
-    }).addTo(map);
+  // base tile layer
+  var Countries_Light = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizk7j6xc00052so1e41ow871/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+	  attribution: '',
+    minZoom: 2,
+    maxZoom: 5,
+  }).addTo(map);
 
-    //calls getData function
-    getData(map, MapboxLayer, Countries_Light);
+  //calls getData function
+  getData(map, MapboxLayer, Countries_Light);
+
+}; // close to createMap
 
 
-// close to createMap
-};
+
+
 
 //calculate the radius of each proportional symbol
 function calcPropRadius(attValue) {
-    //scale factor to adjust symbol size evenly
-    var scaleFactor = 50;
-    //area based on attribute value and scale factor
-    var area = attValue * scaleFactor;
-    //radius calculated based on area
-    var radius = Math.sqrt(area/Math.PI);
 
-    return radius;
-};
+  //scale factor to adjust symbol size evenly
+  var scaleFactor = 50;
 
-//function to convert markers to circle markers
+  //area based on attribute value and scale factor
+  var area = attValue * scaleFactor;
+
+  //radius calculated based on area
+  var radius = Math.sqrt(area/Math.PI);
+
+  // return the radius of the circle
+  return radius;
+
+}; // close to calcPropRadius
+
+
+
+
+
+// function to convert markers to circle markers
 function pointToLayer(feature, latlng, attributes, layer){
-    //Determine which attribute to visualize with proportional symbols
-    var attribute = attributes[0];
+  //Determine which attribute to visualize with proportional symbols
+  var attribute = attributes[0];
 
-    //create marker options
-       var options = {
-         fillColor: "rgb(0, 255, 204)",
-         color: "#000",
-         weight: 1,
-         opacity: 1,
-         fillOpacity: 0.4
-       };
+  // create marker options
+  var options = {
+    fillColor: "rgb(0, 255, 204)",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.4
+  };
 
-       var popDecline = {
-         fillColor: "rgb(128,0,0)",
-         color: "#000",
-         weight: 1,
-         opacity: 1,
-         fillOpacity: 0.4
-       };
+  var popDecline = {
+    fillColor: "rgb(128,0,0)",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.4
+  };
 
-    //For each feature, determine its value for the selected attribute
-    var attValue = Number(feature.properties[attribute]) - 1;
+  // For each feature, determine its value for the selected attribute
+  var attValue = Number(feature.properties[attribute]) - 1;
 
-    if (attValue > 0) {
-      options.radius = calcPropRadius((attValue * 100));
-      var layer = L.circleMarker(latlng, options);
-    } else {
-      attValue = ((1 - Number(feature.properties[attribute]))* 100);
-      popDecline.radius = calcPropRadius(attValue);
-      var layer = L.circleMarker(latlng, popDecline);
-    };
+  if (attValue > 0) {
+    options.radius = calcPropRadius((attValue * 100));
+    var layer = L.circleMarker(latlng, options);
+  } else {
+    attValue = ((1 - Number(feature.properties[attribute]))* 100);
+    popDecline.radius = calcPropRadius(attValue);
+    var layer = L.circleMarker(latlng, popDecline);
+  };
 
-    //build popup content string starting with city...Example 2.1 line 24
-    var panelContent = "<p><b>Country:</b> " + feature.properties.Country + "</p>";
+  // build popup content string starting with city...Example 2.1 line 24
+  var panelContent = "<p><b>Country:</b> " + feature.properties.Country + "</p>";
 
-    //add formatted attribute to popup content string
-    var yearOne = attribute.split("_")[2];
-    var yearTwo = attribute.split("_")[3];
+  // add formatted attribute to popup content string
+  var yearOne = attribute.split("_")[2];
+  var yearTwo = attribute.split("_")[3];
 
-    panelContent += "<p><b>Population growth from " + yearOne + " to "
-      + yearTwo + ":</b> " + parseFloat(((feature.properties[attribute]) - 1) * 100).toFixed(2)
-      + "% </p>";
+  panelContent += "<p><b>Population growth from " + yearOne + " to "
+    + yearTwo + ":</b> " + parseFloat(((feature.properties[attribute]) - 1) * 100).toFixed(2)
+    + "% </p>";
 
-    //Example 1.3 line 6...in UpdatePropSymbols()
-    var popup = new Popup(feature.properties, layer, options.radius);
+  // in UpdatePropSymbols()
+  var popup = new Popup(feature.properties, layer, options.radius);
 
-    //add popup to circle marker
-    popup.bindToLayer();
+  // add popup to circle marker
+  popup.bindToLayer();
 
-    //event listeners to open popup on hover
-    layer.on({
-        mouseover: function(){
-            this.openPopup();
-        },
-        mouseout: function(){
-            this.closePopup();
-        },
-        click: function(){
-          $("#infoPanel").html(panelContent);
-        }
-    });
-
-    //return the circle marker to the L.geoJson pointToLayer option
-    return layer;
-};
-
-function search (map, data, proportionalSymbols){
-
-  var searchLayer = new L.Control.Search({
-    position: 'topright',
-    layer: proportionalSymbols,
-    propertyName: 'Country',
-    marker: false,
-    moveToLocation: function (latlng, title, map) {
-      //var zoom = map.getBoundsZoom(latlng.layer.getBounds());
-      map.setView(latlng, 13);
+  // event listeners to open popup on hover
+  layer.on({
+    mouseover: function(){
+      this.openPopup();
+    },
+    mouseout: function(){
+      this.closePopup();
+    },
+    click: function(){
+      $("#infoPanel").html(panelContent);
     }
   });
 
-    map.addControl (searchLayer);
+  // return the circle marker to the L.geoJson pointToLayer option
+  return layer;
 
-};
+}; // close to pointToLayer function
+
+
+
+
+
+// funtion to create the search control
+function search (map, data, proportionalSymbols){
+
+  // new variable search control
+  var searchLayer = new L.Control.Search({
+    position: 'topright',  // positions the operator in the top right of the screen
+    layer: proportionalSymbols,  //use proportionalSymbols as the layer to search through
+    propertyName: 'Country',  // search for country name
+    marker: false,
+    moveToLocation: function (latlng, title, map) {
+
+      // set the view once searched to the circle marker's latlng and zoom
+      map.setView(latlng, 13);
+
+    } // close to moveToLocation
+  }); // close to var searchLayer
+
+  // add the control to the map
+  map.addControl (searchLayer);
+
+}; // close to search function
+
+
+
+
 
 //Add circle markers for point features to the map
 function createPropSymbols(data, map, attributes, MapboxLayer, Countries_Light){
-    //create a Leaflet GeoJSON layer and add it to the map
-    var proportionalSymbols = L.geoJson(data, {
-        pointToLayer: function(feature, latlng){
-            return pointToLayer(feature, latlng, attributes);
-        }
-    }).addTo(map);
 
-    search(map, data, proportionalSymbols)
+  //create a Leaflet GeoJSON layer and add it to the map
+  var proportionalSymbols = L.geoJson(data, {
+    pointToLayer: function(feature, latlng){
+      return pointToLayer(feature, latlng, attributes);
+    }
+  }).addTo(map);
 
-    //changeMap(map, MapboxLayer, Countries_Light, proportionalSymbols);
+  // call search funtion
+  search(map, data, proportionalSymbols)
 
-};
+  //changeMap(map, MapboxLayer, Countries_Light, proportionalSymbols);
+
+}; // close ot createPropSymbols
 
 
+
+
+// // function to change the choropleth map style layer
 // function changeMap (map, MapboxLayer, Countries_Light, proportionalSymbols) {
 //
 //   var maptype = 1;
@@ -456,39 +488,46 @@ function createPropSymbols(data, map, attributes, MapboxLayer, Countries_Light){
 //    });
 // };
 
+
+
+
+
 // Create new sequence controls
 function createSequenceControls(map, attributes, index){
 
   var SequenceControl = L.Control.extend({
-      options: {
-          position: 'bottomleft'
-      },
+    options: {
+      position: 'bottomleft'
+    },
 
-      onAdd: function (map) {
-          // create the control container div with a particular class name
-          var container = L.DomUtil.create('div', 'sequence-control-container');
+    onAdd: function (map) {
 
-          //create range input element (slider)
-          $(container).append('<input class="range-slider" type="range">');
+      // create the control container div with a particular class name
+      var container = L.DomUtil.create('div', 'sequence-control-container');
 
-          //add skip buttons
-          $(container).append('<button class="skip" id="reverse" title="Reverse">Reverse</button>');
-          // Adds reverse image.
-          //$('#reverse').html('<img src="img/reverse.png">');
+      //create range input element (slider)
+      $(container).append('<input class="range-slider" type="range">');
 
-          $(container).append('<button class="skip" id="forward" title="Forward">Skip</button>');
-          // Adds forward image.  Right arrow by Guilhem from the Noun Project
-          //$('#forward').html('<img src="lib/images/forward.png">');
+      //add skip buttons
+      $(container).append('<button class="skip" id="reverse" title="Reverse">Reverse</button>');
+      // Adds reverse image.
+      //$('#reverse').html('<img src="img/reverse.png">');
 
-          //kill any mouse event listeners on the map
-          $(container).on('mousedown dblclick', function(e){
-            L.DomEvent.stopPropagation(e);
-          });
+      $(container).append('<button class="skip" id="forward" title="Forward">Skip</button>');
+      // Adds forward image.  Right arrow by Guilhem from the Noun Project
+      //$('#forward').html('<img src="lib/images/forward.png">');
 
-          return container;
-      }
-  });
+      //kill any mouse event listeners on the map
+      $(container).on('mousedown dblclick', function(e){
+        L.DomEvent.stopPropagation(e);
+      });
 
+      return container;
+
+    } // close to onAdd
+  }); // close to var SequenceControl
+
+  // add the Sequence Control to the map
   map.addControl(new SequenceControl());
 
   //set slider attributes
@@ -509,30 +548,41 @@ function createSequenceControls(map, attributes, index){
   });
 
   $('.skip').click(function(){
-       //get the old index value
-       var index = $('.range-slider').val();
 
-       //Step 6: increment or decrement depending on button clicked
-       if ($(this).attr('id') == 'forward'){
-           index++;
-           //Step 7: if past the last attribute, wrap around to first attribute
-           index = index > 6 ? 0 : index;
-       } else if ($(this).attr('id') == 'reverse'){
-           index--;
-           //Step 7: if past the first attribute, wrap around to last attribute
-           index = index < 0 ? 6 : index;
-       };
+    // get the old index value
+    var index = $('.range-slider').val();
 
-       // update slider
-       $('.range-slider').val(index);
+    // if forward button is clicked
+    if ($(this).attr('id') == 'forward'){
 
-       updatePropSymbols(map, attributes[index]);
+      // increment index
+      index++;
+      // if past the last attribute, wrap around to first attribute
+      index = index > 6 ? 0 : index;
 
-   });
+    } else if ($(this).attr('id') == 'reverse'){ // if reverse button is clicked
 
-};
+      // decrement index
+      index--;
+      // if past the first attribute, wrap around to last attribute
+      index = index < 0 ? 6 : index;
 
-//OOM Popup constructor function
+    };
+
+    // update slider
+    $('.range-slider').val(index);
+
+    updatePropSymbols(map, attributes[index]);
+
+  }); // close to '.skip' click function
+
+}; // close to createSequenceControls function
+
+
+
+
+
+// OOM Popup constructor function
 function Popup(properties, layer, radius){
   this.properties = properties;
   this.layer = layer;
@@ -546,6 +596,11 @@ function Popup(properties, layer, radius){
   };
 };
 
+
+
+
+
+// function to create the Proportional Symbols map legend
 function createLegend(map, attributes){
 
   var LegendControl = L.Control.extend({
@@ -567,98 +622,124 @@ function createLegend(map, attributes){
 
       return legendContainer;
 
-    }
-  });
+    } // close to onAdd
+  }); // close to var LegendControl
 
+  // add the legendControl to the map
   map.addControl(new LegendControl());
 
-};
+}; // close to createLegend function
 
-// Resize proportional symbols according to new attribute values
+
+
+
+
+// function to resize proportional symbols according to new attribute values
 function updatePropSymbols(map, attribute){
-    map.eachLayer(function(layer){
-      if (layer.feature && layer.feature.properties[attribute]){
 
-            //access feature properties
-            var props = layer.feature.properties;
+  // for each layer of the map
+  map.eachLayer(function(layer){
 
-            //update each feature's radius based on new attribute values
-            var radius = calcPropRadius(((props[attribute]) - 1) * 100);
+    // if the layer contains both the layer feature and properties with attributes
+    if (layer.feature && layer.feature.properties[attribute]){
 
-            if (radius > 0) {
-              layer.setRadius(radius);
-            } else {
-              layer.setRadius(radius);
-            }
+      // access feature properties
+      var props = layer.feature.properties;
 
-            //add country to popup content string
-            var panelContent = "<p><b>Country:</b> " + props.Country + "</p>";
+      // update each feature's radius based on new attribute values
+      var radius = calcPropRadius(((props[attribute]) - 1) * 100);
 
-            //add formatted attribute to panel content string
-            var year = attribute.split("_")[2];
-            var yearDos = attribute.split("_")[3];
+      if (radius > 0) {
+        layer.setRadius(radius);
+      } else {
+        layer.setRadius(radius);
+      }
 
-            panelContent += "<p><b>Population growth from " + year + " to " + yearDos + ":</b> "
-            + parseFloat(((props[attribute]) - 1) * 100).toFixed(2) + "% </p>";
+      // add country to popup content string
+      var panelContent = "<p><b>Country:</b> " + props.Country + "</p>";
 
-            //Example 1.3 line 6...in UpdatePropSymbols()
-            var popup = new Popup(props, layer, radius);
+      // add formatted attribute to panel content string
+      var year = attribute.split("_")[2];
+      var yearDos = attribute.split("_")[3];
 
-            //add popup to circle marker
-            popup.bindToLayer();
+      panelContent += "<p><b>Population growth from " + year + " to " + yearDos + ":</b> "
+        + parseFloat(((props[attribute]) - 1) * 100).toFixed(2) + "% </p>";
 
-            //event listeners to open popup on hover
-            layer.on({
-                mouseover: function(){
-                    this.openPopup();
-                },
-                mouseout: function(){
-                    this.closePopup();
-                },
-                click: function(){
-                  $("#infoPanel").html(panelContent);
-                }
-            });
+      // in UpdatePropSymbols()
+      var popup = new Popup(props, layer, radius);
 
-        };
-    });
-};
+      //add popup to circle marker
+      popup.bindToLayer();
+
+      //event listeners to open popup on hover
+      layer.on({
+        mouseover: function(){
+          this.openPopup();
+        },
+        mouseout: function(){
+          this.closePopup();
+        },
+        click: function(){
+          // add panelContent to div
+          $("#infoPanel").html(panelContent);
+        }
+      }); // close to layer.on
+    }; // close to if statement
+  }); // close to eachLayer function
+}; // close to updatePropSymbols function
+
+
+
+
 
 // build an attributes array for the data
 function processData(data){
-    //empty array to hold attributes
-    var attributes = [];
 
-    //properties of the first feature in the dataset
-    var properties = data.features[0].properties;
+  //empty array to hold attributes
+  var attributes = [];
 
-    //push each attribute name into attributes array
-    for (var attribute in properties){
-        //only take attributes with population values
-        if (attribute.indexOf("Pop") > -1){
-            attributes.push(attribute);
-        };
+  //properties of the first feature in the dataset
+  var properties = data.features[0].properties;
+
+  //push each attribute name into attributes array
+  for (var attribute in properties){
+
+    //only take attributes with population values
+    if (attribute.indexOf("Pop") > -1){
+      attributes.push(attribute);
     };
 
-    return attributes;
-};
+  }; // close to for loop
 
-// Import GeoJSON data
+  // return the array of attributes that meet the if statement to be pushed
+  return attributes;
+
+}; // close to processData
+
+
+
+
+
+// import GeoJSON data
 function getData(map, MapboxLayer, Countries_Light){
-    //load the data
-    $.ajax("data/AssignmentOne.geojson", {
-        dataType: "json",
-        success: function(response){
 
-          //create an attributes array
-          var attributes = processData(response);
+  //load the data
+  $.ajax("data/AssignmentOne.geojson", {
+    dataType: "json",
+    success: function(response){
 
-          //call function to create proportional symbols
-          createPropSymbols(response, map, attributes, MapboxLayer, Countries_Light);
-          createSequenceControls(map, attributes, MapboxLayer);
-        }
-    });
-};
+      //create an attributes array
+      var attributes = processData(response);
+
+      //call function to create proportional symbols
+      createPropSymbols(response, map, attributes, MapboxLayer, Countries_Light);
+      createSequenceControls(map, attributes, MapboxLayer);
+
+    } // close to success
+  }); // close to ajax
+}; // close to getData function
+
+
 
 //call the initialize function when the document has loaded
 $(document).ready(initialize);
