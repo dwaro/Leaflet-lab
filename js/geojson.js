@@ -25,6 +25,13 @@
 //9. Reassign the current attribute based on the new attributes array index
 //10. Resize proportional symbols according to each feature's value for the new attribute
 
+//PSEUDO-CODE FOR ATTRIBUTE LEGEND
+// 1. Add an `<svg>` element to the legend container
+// 2. Add a `<circle>` element for each of three attribute values: max, mean, and min
+// 3. Assign each `<circle>` element a center and radius based on the dataset max, mean, and min values of the current attribute
+// 4. Create legend text to label each circle
+// 5. Update circle attributes and legend text when the data attribute is changed by the user
+
 //initialize function called when the script loads
 function initialize(){
 
@@ -211,6 +218,49 @@ function createSequenceControls(map, attributes){
 
 };
 
+// updates the temporal legend with new content
+function updateLegend(map, attribute){
+
+      var yearUno = attribute.split("_")[1];
+
+      var legendContent = "<b>Population Growth from: " + yearUno + '</b>';
+
+      $('#temporal-legend').html(legendContent);
+
+};
+
+function createLegend(map, attributes){
+
+  var LegendControl = L.Control.extend({
+    options: {
+      position: 'bottomright'
+    },
+
+    onAdd: function (map) {
+
+      // create the control container with a particular class name
+      var legendContainer = L.DomUtil.create('div', 'legend-control-container');
+
+      $(legendContainer).append('<div id="temporal-legend" >');
+
+      //kill any mouse event listeners on the map
+      $(legendContainer).on('mousedown dblclick', function(e){
+        L.DomEvent.stopPropagation(e);
+      });
+
+      return legendContainer;
+
+    } // close to onAdd
+  }); // close to var LegendControl
+
+  // add the legendControl to the map
+  map.addControl(new LegendControl());
+  updateLegend(map, attributes[0]);
+
+}; // close to createLegend function
+
+
+
 
 // funtion to create popups
 function createPopup(properties, attribute, layer, radius){
@@ -300,6 +350,7 @@ function getData(map){
           //call function to create proportional symbols
           createPropSymbols(response, map, attributes);
           createSequenceControls(map, attributes);
+          createLegend(map, attributes);
         }
     });
 };

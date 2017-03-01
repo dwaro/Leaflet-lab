@@ -136,7 +136,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -100,
+          -105,
           60
         ]
       }
@@ -236,7 +236,7 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -70.4,
+          -70,
           19
         ]
       }
@@ -298,6 +298,26 @@
         "coordinates": [
           -90.15,
           15.3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Country": "Haiti",
+        "Pop_growth_1980_1985": 1.12223427313,
+        "Pop_growth_1985_1990": 1.11207825569,
+        "Pop_growth_1990_1995": 1.10142357526,
+        "Pop_growth_1995_2000": 1.09327464478,
+        "Pop_growth_2000_2005": 1.08354115005,
+        "Pop_growth_2005_2010": 1.07947505292,
+        "Pop_growth_2010_2015": 1.07114770361
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73,
+          19
         ]
       }
     },
