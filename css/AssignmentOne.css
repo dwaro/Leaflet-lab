@@ -1,7 +1,7 @@
 /* AssignmentOne stylesheet by David J. Waro, 2017 G575 */
 
 body {
-  background-color: rgba(200, 3, 3, 0.75);
+  background-color: rgba(235, 186, 136, 1);
 }
 
 #mydiv {
@@ -19,10 +19,10 @@ th {
   border-width: medium;
   border-radius: 2em;
   height: 48em;
-  width: 75%;
+  width: 68%;
   position: fixed;
   top: 12.5%;
-  left: 22.5%;
+  left: 30%;
   display: inline-block;
 }
 
@@ -45,22 +45,51 @@ th {
   line-height: 10px;
   padding: 3px;
   text-align: center;
+  font-family: Helvetica, sans-serif;
 }
 
 #infoPanel {
   width: 14em;
   display: inline-block;
-  top: 150px;
+  top: 100px;
   vertical-align: bottom;
   position: fixed;
   left: 25px;
   text-align: left;
   height: 100px;
   font-size: 1.5em;
+  font-family: Helvetica, sans-serif;
+}
+
+#info-source {
+  position: absolute;
+  top: 640px;
+  left: 25px;
+  width: 300px;
+  line-height: 10px;
+}
+
+
+#flags {
+  top: 400px;
+  left: 40px;
+  height: 175px;
+  position: absolute;
+}
+
+#redirect {
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+  top: 376px;
+  left: 40px;
+  width: 225px;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  border-radius: 1em;
 }
 
 .sequence-control-container {
-    width: 350px;
+    width: 285px;
     height: 28px;
     background-color: rgba(255,255,255,0.8);
     padding: 6px;
@@ -79,36 +108,26 @@ th {
   border-radius: 1em;
 }
 
-#choro {
-  height: 40px;
-  width: 100px;
-  left: 80px;
-  top: 100px;
-  background-color: rgba(255,255,255,0.8);
-  position: fixed;
-  border: solid black 1px;
-  border-radius: 1em;
-
-}
-
-.reexpress {
-  top: 110px;
-  left: 93px;
-  position: fixed;
-}
-
 .range-slider {
     width: 200px;
 }
 
 #forward {
     float: right;
-    line-height: 20px;
+    line-height: 18px;
+    border-radius: 5px;
+    border: solid black 1px;
+    font-size: 15px;
+    width: 30px;
 }
 
 #reverse {
     float: left;
-    line-height: 20px;
+    line-height: 18px;
+    border-radius: 5px;
+    border: solid black 1px;
+    font-size: 15px;
+    width: 30px;
 }
 
 .leaflet-popup-content p {

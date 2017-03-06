@@ -6,16 +6,8 @@ function initialize(){
 };
 
 
-
-
-
 // Title added
 $("#title").append('Western Hemisphere Population Growth 1980-2015');
-
-// choropleth tile layer to be added with reexpress
-// var MapboxLayer;
-
-
 
 
 //function to instantiate the Leaflet map
@@ -28,24 +20,15 @@ function createMap(){
     zoom: 3
   });
 
-  // add in the choropleth button
-  $("#choro").append('<button class="reexpress" title="Reexpress">Choropleth</button>');
-
-  // choropleth tile layer to be added with reexpress
-  var MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-    minZoom: 3,
-    maxZoom: 5,
-  });
-
   // base tile layer
   var Countries_Light = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizk7j6xc00052so1e41ow871/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
 	  attribution: '',
-    minZoom: 3,
+    minZoom: 2,
     maxZoom: 5,
   }).addTo(map);
 
   //calls getData function
-  getData(map, MapboxLayer, Countries_Light);
+  getData(map);
 
 }; // close to createMap
 
@@ -77,12 +60,12 @@ function calcPropRadius(attValue) {
 // function to convert markers to circle markers
 function pointToLayer(feature, latlng, attributes, layer){
 
-  //Determine which attribute to visualize with proportional symbols
+  // determine which attribute to visualize with proportional symbols
   var attribute = attributes[0];
 
   // create marker options
   var options = {
-    //fillColor: "rgb(0, 255, 204)",
+    fillColor: "#ef8a62",
     color: "#000",
     weight: 1,
     opacity: 1,
@@ -92,29 +75,158 @@ function pointToLayer(feature, latlng, attributes, layer){
   // For each feature, determine its value for the selected attribute
   var attValue = Number(feature.properties[attribute]) - 1;
 
-  if (attValue > 0) {
-    options.fillColor = "#ef8a62";
-    options.radius = calcPropRadius((attValue * 1000));
-    var layer = L.circleMarker(latlng, options);
-  } else {
-    options.fillColor = "#67a9cf";
-    attValue = ((1 - Number(feature.properties[attribute]))* 1000);
-    options.radius = calcPropRadius(attValue);
-    var layer = L.circleMarker(latlng, options);
-  };
+  // calculate the radius and assign it to the radius of the options marker.
+  // Multiplied by 1000 to give differentiation between the attribute values
+  // since they are originally so small as a hundredth decimal place on pop.
+  // growth
+  options.radius = calcPropRadius((attValue * 1000));
 
-  // build popup content string starting with city...Example 2.1 line 24
-  var panelContent = "<p><b><br>Country:</br></b> " + feature.properties.Country + "</p>";
+  // assign the marker with the options styling and using the latlng repsectively
+  var layer = L.circleMarker(latlng, options);
 
-  // add formatted attribute to popup content string
-  var yearOne = attribute.split("_")[2];
-  var yearTwo = attribute.split("_")[3];
 
+  // panel content string starting with country
+  var panelContent = "<p><b><br>Country:</b></br> " + feature.properties.Country + "</p>";
+
+  // add formatted attribute to panel content string
+  var yearOne = attribute.split("_")[2]; // split on the 3rd _
+  var yearTwo = attribute.split("_")[3]; // split on the 4th _
+
+  // add the years of population growth and round the decimals to two places
   panelContent += "<p><b>Population growth <br>from " + yearOne + " to "
     + yearTwo + ":</br></b> " + parseFloat(((feature.properties[attribute]) - 1) * 100).toFixed(2)
     + "% </p>";
 
-  // in UpdatePropSymbols()
+  // new flag element to be added to a new div representing each country
+  var flag = document.createElement("img");
+    flag.setAttribute("height", "150");
+    flag.setAttribute("width", "225");
+
+  // variable to hold the hyperlink for the flags
+  var href;
+
+  // if statement assigns the proper flag image and link to href for each respective
+  // country
+  if (feature.properties.Country == 'Argentina') {
+    flag.src = 'img/argentina-flag.gif';
+    flag.setAttribute("alt", "Argentina flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ar.html';
+  } else if (feature.properties.Country == 'Bahamas') {
+    flag.src = 'img/bahamas-flag.gif';
+    flag.setAttribute("alt", "Bahamas flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/bf.html';
+  } else if (feature.properties.Country == 'Barbados') {
+    flag.src = 'img/barbados-flag.gif';
+    flag.setAttribute("alt", "Barbados flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/bb.html';
+  } else if (feature.properties.Country == 'Belize') {
+    flag.src = 'img/belize-flag.gif';
+    flag.setAttribute("alt", "Belize flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/bh.html';
+  } else if (feature.properties.Country == 'Bolivia') {
+    flag.src = 'img/bolivia-flag.gif';
+    flag.setAttribute("alt", "Bolivian flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/bl.html';
+  } else if (feature.properties.Country == 'Brazil') {
+    flag.src = 'img/brazil-flag.gif';
+    flag.setAttribute("alt", "Brazilian flag");
+    href = 'https://www.cia.gov/library/publications/resources/the-world-factbook/geos/br.html';
+  } else if (feature.properties.Country == 'Canada') {
+    flag.src = 'img/canada-flag.gif';
+    flag.setAttribute("alt", "Canadian flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ca.html';
+  } else if (feature.properties.Country == 'Chile') {
+    flag.src = 'img/chile-flag.gif';
+    flag.setAttribute("alt", "Chilean flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ci.html';
+  } else if (feature.properties.Country == 'Colombia') {
+    flag.src = 'img/colombia-flag.gif';
+    flag.setAttribute("alt", "Colombian flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/co.html';
+  } else if (feature.properties.Country == 'Costa Rica') {
+    flag.src = 'img/costa_rica-flag.gif';
+    flag.setAttribute("alt", "Costa Rican flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/cs.html';
+  } else if (feature.properties.Country == 'Cuba') {
+    flag.src = 'img/cuba-flag.gif';
+    flag.setAttribute("alt", "Cuban flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/cu.html';
+  } else if (feature.properties.Country == 'Dominican Republic') {
+    flag.src = 'img/dominican_republic-flag.gif';
+    flag.setAttribute("alt", "Dominican Republic flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/dr.html';
+  } else if (feature.properties.Country == 'Ecuador') {
+    flag.src = 'img/ecuador-flag.gif';
+    flag.setAttribute("alt", "Ecuadoran flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ec.html';
+  } else if (feature.properties.Country == 'El Salvador') {
+    flag.src = 'img/el_salvador-flag.gif';
+    flag.setAttribute("alt", "El Salvadoran flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/es.html';
+  } else if (feature.properties.Country == 'Guatemala') {
+    flag.src = 'img/guatemala-flag.gif';
+    flag.setAttribute("alt", "Guatemalan flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/gt.html';
+  } else if (feature.properties.Country == 'Haiti') {
+    flag.src = 'img/haiti-flag.gif';
+    flag.setAttribute("alt", "Haitian flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ha.html';
+  } else if (feature.properties.Country == 'Honduras') {
+    flag.src = 'img/honduras-flag.gif';
+    flag.setAttribute("alt", "Honduran flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ho.html';
+  } else if (feature.properties.Country == 'Jamaica') {
+    flag.src = 'img/jamaica-flag.gif';
+    flag.setAttribute("alt", "Jamaican flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/jm.html';
+  } else if (feature.properties.Country == 'Mexico') {
+    flag.src = 'img/mexico-flag.gif';
+    flag.setAttribute("alt", "Mexican flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/mx.html';
+  } else if (feature.properties.Country == 'Nicaragua') {
+    flag.src = 'img/nicaragua-flag.gif';
+    flag.setAttribute("alt", "Nicaraguan flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/nu.html';
+  } else if (feature.properties.Country == 'Panama') {
+    flag.src = 'img/panama-flag.gif';
+    flag.setAttribute("alt", "Panamanian flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/pm.html';
+  } else if (feature.properties.Country == 'Paraguay') {
+    flag.src = 'img/paraguay-flag.gif';
+    flag.setAttribute("alt", "Paraguay flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/pa.html';
+  } else if (feature.properties.Country == 'Peru') {
+    flag.src = 'img/peru-flag.gif';
+    flag.setAttribute("alt", "Peruvian flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/pe.html';
+  } else if (feature.properties.Country == 'Suriname') {
+    flag.src = 'img/suriname-flag.gif';
+    flag.setAttribute("alt", "Suriname flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ns.html';
+  } else if (feature.properties.Country == 'Trinidad and Tobago') {
+    flag.src = 'img/trinidad_and_tobago-flag.gif';
+    flag.setAttribute("alt", "Trinidad and Tobago flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/td.html';
+  } else if (feature.properties.Country == 'United States') {
+    flag.src = 'img/us-flag.gif';
+    flag.setAttribute("alt", "American flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/us.html';
+  } else if (feature.properties.Country == 'Uruguay') {
+    flag.src = 'img/uruguay-flag.gif';
+    flag.setAttribute("alt", "Uruguay flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/uy.html';
+  } else if (feature.properties.Country == 'Venezuela') {
+    flag.src = 'img/venezuela-flag.gif';
+    flag.setAttribute("alt", "Venezuelan flag");
+    href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ve.html';
+  };
+
+  // when the flag is clicked, open a new window of the linked webpage
+  flag.onclick = function() {
+    window.open(href, '_blank');
+  };
+
+  // creates a new popup object
   var popup = new Popup(feature.properties, layer, options.radius);
 
   // add popup to circle marker
@@ -129,7 +241,9 @@ function pointToLayer(feature, latlng, attributes, layer){
       this.closePopup();
     },
     click: function(){
-      $("#infoPanel").html(panelContent);
+      $("#infoPanel").html(panelContent); // add the info panel
+      $("#flags").html(flag); // add the flag
+      $("#redirect").html('Click for more information!'); // show the click affordance once the panel is visible
     }
   });
 
@@ -147,8 +261,8 @@ function search (map, data, proportionalSymbols){
 
   // new variable search control
   var searchLayer = new L.Control.Search({
-    position: 'topleft',  // positions the operator in the top right of the screen
-    layer: proportionalSymbols,  //use proportionalSymbols as the layer to search through
+    position: 'topleft',  // positions the operator in the top left of the screen
+    layer: proportionalSymbols,  // use proportionalSymbols as the layer to search through
     propertyName: 'Country',  // search for country name
     marker: false,
     moveToLocation: function (latlng, title, map) {
@@ -168,10 +282,10 @@ function search (map, data, proportionalSymbols){
 
 
 
-//Add circle markers for point features to the map
-function createPropSymbols(data, map, attributes, MapboxLayer, Countries_Light){
+// add circle markers for point features to the map
+function createPropSymbols(data, map, attributes){
 
-  //create a Leaflet GeoJSON layer and add it to the map
+  // create a Leaflet GeoJSON layer and add it to the map
   var proportionalSymbols = L.geoJson(data, {
     pointToLayer: function(feature, latlng){
       return pointToLayer(feature, latlng, attributes);
@@ -181,166 +295,7 @@ function createPropSymbols(data, map, attributes, MapboxLayer, Countries_Light){
   // call search funtion
   search(map, data, proportionalSymbols)
 
-  // change the map to choropleth
-  changeMap(map, MapboxLayer, Countries_Light, proportionalSymbols);
-
 }; // close ot createPropSymbols
-
-
-
-
-// function to change the choropleth map style layer
-function changeMap (map, MapboxLayer, Countries_Light, proportionalSymbols) {
-
-  var maptype = 1;
-  map.addLayer(proportionalSymbols);
-
-  $('.reexpress').click( function() {
-
-    updateChoropleth(map, MapboxLayer, proportionalSymbols, Countries_Light);
-    console.log("maptype: " + maptype);
-
-    if (maptype == 1) {
-      map.removeLayer(Countries_Light);
-      map.removeLayer(proportionalSymbols);
-      map.addLayer(MapboxLayer);
-      maptype = 0;
-    } else {
-      map.removeLayer(MapboxLayer);
-      map.addLayer(proportionalSymbols);
-      map.addLayer(Countries_Light);
-      maptype = 1;
-    };
-
-  });
-
-};
-
-
-
-
-
-// update choropleth based on indexes
-function updateChoropleth (map, MapboxLayer, proportionalSymbols, Countries_Light) {
-
-  //set slider attributes
-  $('.range-slider').attr({
-    max: 6,
-    min: 0,
-    value: 0,
-    step: 1
-  });
-
-  // input listener for slider
-  $('.range-slider').on('input', function(){
-    // get the new index value
-    var index = $(this).val();
-
-    if ( index == 0) {
-      MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-        minZoom: 3,
-        maxZoom: 5,
-      });
-    } else if ( index == 1 ){
-      MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbkm14000f2so13h608wor/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-        minZoom: 3,
-        maxZoom: 5,
-      });
-    } else if ( index == 2) {
-      MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbwnf9000e2smzpu8c83cy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-        minZoom: 3,
-        maxZoom: 5,
-      });
-    } else if ( index == 3) {
-      MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbz2la000h2so1y9694crg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-        minZoom: 3,
-        maxZoom: 5,
-      });
-    } else if ( index == 4) {
-      MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc116j000g2smzbl37le49/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-        minZoom: 3,
-        maxZoom: 5,
-      });
-    } else if ( index == 5) {
-      MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc3koi000c2so96po7xgww/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-        minZoom: 3,
-        maxZoom: 5,
-      });
-    } else {
-      MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc62js000d2so90z41gk4k/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-        minZoom: 3,
-        maxZoom: 5,
-      });
-    };
-
-   console.log("slider index: " + index);
-   changeMap(map, MapboxLayer, proportionalSymbols, Countries_Light);
-
-  });
-
-  $('.skip').click(function(){
-       // get the old index value
-       var index = $('.range-slider').val();
-
-       // increment or decrement depending on button clicked
-       if ($(this).attr('id') == 'forward'){
-           //index++;
-           // if past the last attribute, wrap around to first attribute
-           index = index > 6 ? 0 : index;
-       } else if ($(this).attr('id') == 'reverse'){
-           //index--;
-           // if past the first attribute, wrap around to last attribute
-           index = index < 0 ? 6 : index;
-       };
-
-       // update slider
-       $('.range-slider').val(index);
-
-       if ( index == 0) {
-         MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizivimln001r2rp3d5dtsfei/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-           minZoom: 3,
-           maxZoom: 5,
-         });
-      } else if ( index == 1 ){
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbkm14000f2so13h608wor/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 3,
-          maxZoom: 5,
-        });
-      } else if ( index == 2) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbwnf9000e2smzpu8c83cy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 3,
-          maxZoom: 5,
-        });
-      } else if ( index == 3) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkbz2la000h2so1y9694crg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 3,
-          maxZoom: 5,
-        });
-      } else if ( index == 4) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc116j000g2smzbl37le49/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 3,
-          maxZoom: 5,
-        });
-      } else if ( index == 5) {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc3koi000c2so96po7xgww/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 3,
-          maxZoom: 5,
-        });
-      } else {
-        MapboxLayer = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizkc62js000d2so90z41gk4k/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
-          minZoom: 3,
-          maxZoom: 5,
-        });
-      };
-
-      console.log("index: " + index);
-      changeMap(map, MapboxLayer, proportionalSymbols, Countries_Light);
-
-   });
-
-   //changeMap(map, MapboxLayer, proportionalSymbols, Countries_Light);
-
-};
 
 
 
@@ -349,6 +304,7 @@ function updateChoropleth (map, MapboxLayer, proportionalSymbols, Countries_Ligh
 // Create new sequence controls
 function createSequenceControls(map, attributes, index){
 
+  // position the sequence control in the bottom left of the map
   var SequenceControl = L.Control.extend({
     options: {
       position: 'bottomleft'
@@ -359,19 +315,14 @@ function createSequenceControls(map, attributes, index){
       // create the control container div with a particular class name
       var container = L.DomUtil.create('div', 'sequence-control-container');
 
-      //create range input element (slider)
+      //creates range input element (slider)
       $(container).append('<input class="range-slider" type="range">');
 
-      //add skip buttons
-      $(container).append('<button class="skip" id="reverse" title="Reverse">Reverse</button>');
-      // Adds reverse image.
-      //$('#reverse').html('<img src="img/reverse.png">');
+      //add forward and reverse buttons
+      $(container).append('<button class="skip" id="reverse" title="Reverse"><b><</b></button>');
+      $(container).append('<button class="skip" id="forward" title="Forward"><b>></b></button>');
 
-      $(container).append('<button class="skip" id="forward" title="Forward">Skip</button>');
-      // Adds forward image.  Right arrow by Guilhem from the Noun Project
-      //$('#forward').html('<img src="lib/images/forward.png">');
-
-      //kill any mouse event listeners on the map
+      //turn off any mouse event listeners on the sequence control
       $(container).on('mousedown dblclick', function(e){
         L.DomEvent.stopPropagation(e);
       });
@@ -397,10 +348,12 @@ function createSequenceControls(map, attributes, index){
     // get the new index value
     var index = $(this).val();
 
+    // update the proportional symbols based off of the slider
     updatePropSymbols(map, attributes[index]);
 
   });
 
+  // when the skip button is clicked
   $('.skip').click(function(){
 
     // get the old index value
@@ -426,6 +379,7 @@ function createSequenceControls(map, attributes, index){
     // update slider
     $('.range-slider').val(index);
 
+    // update the proportional symbols based off of the skip buttons clicked
     updatePropSymbols(map, attributes[index]);
 
   }); // close to '.skip' click function
@@ -439,6 +393,7 @@ function createSequenceControls(map, attributes, index){
 // OOM Popup constructor function
 function Popup(properties, layer, radius){
 
+  // creating the Popup object that can then be used more universally
   this.properties = properties;
   this.layer = layer;
   this.content = "<p><b>Country:</b> " + this.properties.Country + "</p>";
@@ -448,8 +403,8 @@ function Popup(properties, layer, radius){
       offset: new L.Point(0,-radius),
       closeButton: false
     });
-  };
-};
+  }; // close to bindToLayer
+}; // close to Popup function
 
 
 
@@ -458,28 +413,32 @@ function Popup(properties, layer, radius){
 // updates the temporal legend with new content
 function updateLegend(map, attribute){
 
-  var yearUno = attribute.split("_")[2];
-  var yearTwo = attribute.split("_")[3];
+  var yearUno = attribute.split("_")[2]; // split on the 3rd _
+  var yearTwo = attribute.split("_")[3]; // split on the 4th _
 
+  // content to be added to the legend
   var legendContent = "<b>Population Growth from <br>" + '</br>'
     + yearUno + " to " + yearTwo + '</b>';
 
+  // add in the text to the legend div
   $('#temporal-legend').html(legendContent);
 
-  //get the max, mean, and min values as an object
+  // get the max, mean, and min values as an object
   var circleValues = getCircleValues(map, attribute);
 
+  // searches through circleValues array for instances where key shows up
   for (var key in circleValues){
+
        //get the radius
        var radius = calcPropRadius((circleValues[key] - 1 )* 1000);
 
-       //Step 3: assign the cy and r attributes
+       // assign the cy and r attributes
        $('#' + key).attr({
            cy: 59 - radius,
            r: radius
        });
 
-       // add legend text
+       // add legend text for the circles
        $('#' + key + '-text').text(Math.round((circleValues[key] - 1 ) * 100) + "%");
    };
 };
@@ -488,39 +447,41 @@ function updateLegend(map, attribute){
 
 
 
-//Calculate the max, mean, and min values for a given attribute
+// Calculate the max, mean, and min values for a given attribute
 function getCircleValues(map, attribute){
-    //start with min at highest possible and max at lowest possible number
-    var min = Infinity,
-        max = -Infinity;
 
-    map.eachLayer(function(layer){
-        //get the attribute value
-        if (layer.feature){
-            var attributeValue = Number(layer.feature.properties[attribute]);
+  // start with min at highest possible and max at lowest possible number
+  var min = Infinity,
+      max = -Infinity;
 
-            //test for min
-            if (attributeValue < min){
-                min = attributeValue;
-            };
+  // for each layer
+  map.eachLayer(function(layer){
+    //get the attribute value
+    if (layer.feature){
+      var attributeValue = Number(layer.feature.properties[attribute]);
 
-            //test for max
-            if (attributeValue > max){
-                max = attributeValue;
-            };
-        };
-    });
+      //test for min
+      if (attributeValue < min){
+        min = attributeValue;
+      };
 
-    //set mean
-    var mean = (max + min) / 2;
-
-    //return values as an object
-    return {
-        max: max,
-        mean: mean,
-        min: min
+      //test for max
+      if (attributeValue > max){
+        max = attributeValue;
+      };
     };
-};
+  });
+
+  //set mean
+  var mean = (max + min) / 2;
+
+  //return values as an object
+  return {
+    max: max,
+    mean: mean,
+    min: min
+  };
+}; // close to getCircleValues
 
 
 
@@ -529,10 +490,12 @@ function getCircleValues(map, attribute){
 // function to create the Proportional Symbols map legend
 function createLegend(map, attributes){
 
+  // legend control in the bottom right of the map
   var LegendControl = L.Control.extend({
     options: {
       position: 'bottomright'
     },
+
 
     onAdd: function (map) {
 
@@ -544,30 +507,30 @@ function createLegend(map, attributes){
       // start attribute legend svg string
       var svg = '<svg id="attribute-legend" width="160px" height="60px">';
 
-      //object to base loop on...replaces Example 3.10 line 1
+      //object to base loop on
       var circles = {
         max: 20,
         mean: 40,
         min: 60
       };
 
-      //loop to add each circle and text to svg string
+      // loop to add each circle and text to svg string
       for (var circle in circles){
 
-        //circle string
-        svg += '<circle class="legend-circle" id="' + circle + '" fill="#F47821" fill-opacity="0.8" stroke="#000000" cx="30"/>';
+        //c ircle string
+        svg += '<circle class="legend-circle" id="' + circle + '" fill="#ef8a62" fill-opacity="0.8" stroke="#000000" cx="30"/>';
 
-        //text string
+        // text string
         svg += '<text id="' + circle + '-text" x="65" y="' + circles[circle] + '"></text>';
       };
 
-      //close svg string
+      // close svg string
       svg += "</svg>";
 
-      //add attribute legend svg to container
+      // add attribute legend svg to container
       $(legendContainer).append(svg);
 
-      //kill any mouse event listeners on the map
+      //t urn off any mouse event listeners on the legend
       $(legendContainer).on('mousedown dblclick', function(e){
         L.DomEvent.stopPropagation(e);
       });
@@ -577,7 +540,7 @@ function createLegend(map, attributes){
     } // close to onAdd
   }); // close to var LegendControl
 
-  // add the legendControl to the map
+  // add the legendControl to the map and update it
   map.addControl(new LegendControl());
   updateLegend(map, attributes[0]);
 
@@ -599,16 +562,15 @@ function updatePropSymbols(map, attribute){
       // access feature properties
       var props = layer.feature.properties;
 
+      // subtract one because all pop growths will be at 1._ _ something, so we
+      // want more variation
       var attValue = Number(props[attribute]) - 1;
 
-      if (attValue > 0) {
-        layer.fillColor = "#ef8a62";
-      } else {
-        layer.fillColor = "#67a9cf";
-        attValue = (1 - Number(props[attribute]));
-      }
-
+      // multiply by 1000 to give us variation between the originally small growth
+      // numbers
       var radius = calcPropRadius(attValue * 1000);
+
+      // set the updated radius to the layer
       layer.setRadius(radius);
 
       // add country to popup content string
@@ -618,10 +580,11 @@ function updatePropSymbols(map, attribute){
       var year = attribute.split("_")[2];
       var yearDos = attribute.split("_")[3];
 
+      // updated panel content
       panelContent += "<p><b>Population growth <br>from " + year + " to " + yearDos + ":</br></b> "
         + parseFloat(((props[attribute]) - 1) * 100).toFixed(2) + "% </p>";
 
-      // in UpdatePropSymbols()
+      // new Popup
       var popup = new Popup(props, layer, radius);
 
       //add popup to circle marker
@@ -636,8 +599,10 @@ function updatePropSymbols(map, attribute){
           this.closePopup();
         },
         click: function(){
-          // add panelContent to div
+
+          // add updated panelContent to div
           $("#infoPanel").html(panelContent);
+
         }
       }); // close to layer.on
 
@@ -654,16 +619,16 @@ function updatePropSymbols(map, attribute){
 // build an attributes array for the data
 function processData(data){
 
-  //empty array to hold attributes
+  // empty array to hold attributes
   var attributes = [];
 
-  //properties of the first feature in the dataset
+  // properties of the first feature in the dataset
   var properties = data.features[0].properties;
 
-  //push each attribute name into attributes array
+  // push each attribute name into attributes array
   for (var attribute in properties){
 
-    //only take attributes with population values
+    // only take attributes with population values
     if (attribute.indexOf("Pop") > -1){
       attributes.push(attribute);
     };
@@ -680,7 +645,7 @@ function processData(data){
 
 
 // import GeoJSON data
-function getData(map, MapboxLayer, Countries_Light){
+function getData(map){
 
   //load the data
   $.ajax("data/AssignmentOne.geojson", {
@@ -691,8 +656,8 @@ function getData(map, MapboxLayer, Countries_Light){
       var attributes = processData(response);
 
       //call function to create proportional symbols
-      createPropSymbols(response, map, attributes, MapboxLayer, Countries_Light);
-      createSequenceControls(map, attributes, MapboxLayer);
+      createPropSymbols(response, map, attributes);
+      createSequenceControls(map, attributes);
       createLegend(map, attributes);
 
 
