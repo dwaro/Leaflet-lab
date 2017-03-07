@@ -21,7 +21,7 @@ function createMap(){
   });
 
   // base tile layer
-  var Countries_Light = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizk7j6xc00052so1e41ow871/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
+  var Countries_Light = L.tileLayer('https://api.mapbox.com/styles/v1/djwaro/cizywe9py006x2so5g4wkk90p/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGp3YXJvIiwiYSI6ImNpdXJwYnRidTAwOWgyeXJ2ZnJ6ZnVtb3AifQ.1ajSBLNXDrHg6M7PE_Py_A', {
 	  attribution: '',
     minZoom: 2,
     maxZoom: 5,
@@ -65,7 +65,7 @@ function pointToLayer(feature, latlng, attributes, layer){
 
   // create marker options
   var options = {
-    fillColor: "#ef8a62",
+    fillColor: "#80bfff",
     color: "#000",
     weight: 1,
     opacity: 1,
@@ -518,7 +518,7 @@ function createLegend(map, attributes){
       for (var circle in circles){
 
         //c ircle string
-        svg += '<circle class="legend-circle" id="' + circle + '" fill="#ef8a62" fill-opacity="0.8" stroke="#000000" cx="30"/>';
+        svg += '<circle class="legend-circle" id="' + circle + '" fill="#80bfff" fill-opacity="0.8" stroke="#000000" cx="30"/>';
 
         // text string
         svg += '<text id="' + circle + '-text" x="65" y="' + circles[circle] + '"></text>';
