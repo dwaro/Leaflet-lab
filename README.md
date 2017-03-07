@@ -1,6 +1,5 @@
 # Leaflet-lab
 
-Geojson coordinate data:
-  
-  attribution: 'https://github.com/johan/world.geo.json/blob/master/countries.geo.json';
+Lab 1 for G575 using Leaflet library.
+
   
