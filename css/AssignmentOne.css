@@ -19,7 +19,7 @@ th {
   border-width: medium;
   border-radius: 2em;
   height: 48em;
-  width: 68%;
+  width: 68vw;
   position: fixed;
   top: 12.5%;
   left: 30%;
@@ -28,15 +28,15 @@ th {
 
 #title {
 
-  max-height:20px;
-  min-height:10px;
+  max-height:30px;
+  min-height:20px;
 
   max-width: 100%;
   min-width: 70%;
 
   text-align: center;
   font-family: Didot, Helvetica, serif;
-  font-size: 47px;
+  font-size: 48px;
   position: relative;
   padding: 1px;
 

@@ -221,6 +221,8 @@ function pointToLayer(feature, latlng, attributes, layer){
     href = 'https://www.cia.gov/library/publications/the-world-factbook/geos/ve.html';
   };
 
+  console.log('href: ' + href);
+
   // when the flag is clicked, open a new window of the linked webpage
   flag.onclick = function() {
     window.open(href, '_blank');
@@ -304,10 +306,10 @@ function createPropSymbols(data, map, attributes){
 // Create new sequence controls
 function createSequenceControls(map, attributes, index){
 
-  // position the sequence control in the bottom left of the map
+  // position the sequence control in the bottom l of the map
   var SequenceControl = L.Control.extend({
     options: {
-      position: 'bottomleft'
+      position: 'bottomright'
     },
 
     onAdd: function (map) {
@@ -490,10 +492,10 @@ function getCircleValues(map, attribute){
 // function to create the Proportional Symbols map legend
 function createLegend(map, attributes){
 
-  // legend control in the bottom right of the map
+  // legend control in the bottom left of the map
   var LegendControl = L.Control.extend({
     options: {
-      position: 'bottomright'
+      position: 'bottomleft'
     },
 
 
@@ -628,7 +630,8 @@ function processData(data){
   // push each attribute name into attributes array
   for (var attribute in properties){
 
-    // only take attributes with population values
+    // Populate the array and push the attribute to the end of the array as you 
+    // iterate through it 
     if (attribute.indexOf("Pop") > -1){
       attributes.push(attribute);
     };
